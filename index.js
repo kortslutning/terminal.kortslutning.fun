@@ -1,6 +1,8 @@
 const podcast = 4239;
 function request(endpoint) {
-  return fetch(`http://localhost:5000/v1/${endpoint}.json`).then(i => i.json());
+  return fetch(
+    `https://kortslutning-server-qtoearljfv.now.sh/v1/${endpoint}.json`
+  ).then(i => i.json());
 }
 
 function getPodcast() {
