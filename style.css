@@ -38,10 +38,11 @@ a:visited {
 .kortslutning {
   margin: auto;
   min-height: 70%;
-  width: 70%;
+  width: 900px;
 
   border: 4px double #39e6a1;
-  border-radius: 10px;
+  border-radius: 8%;
+  overflow: hidden;
   background: #092518;
 
   display: flex;
