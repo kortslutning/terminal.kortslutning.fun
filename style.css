@@ -39,6 +39,7 @@ a:visited {
   margin: auto;
   min-height: 70%;
   width: 900px;
+  min-width: 700px;
 
   border: 4px double #39e6a1;
   border-radius: 8%;
