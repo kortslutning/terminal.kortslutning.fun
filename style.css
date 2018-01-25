@@ -84,6 +84,19 @@ a:visited {
   align-items: stretch;
 }
 
+@keyframes blink {
+  to {
+    visibility: hidden;
+  }
+}
+.loading {
+  margin: 2rem;
+}
+.cursor {
+  display: inline-block;
+  animation: blink 1s steps(5, start) infinite;
+}
+
 .episode-item {
   text-decoration: none;
   display: block;

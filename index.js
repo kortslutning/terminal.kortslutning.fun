@@ -42,7 +42,6 @@ function EpisodeList({ episodes, onSelect }) {
 }
 
 function EpisodeDetails({ details, embed }) {
-  console.log(embed);
   return h('.details', [
     h('div.embed', {
       style: { height: embed.height },
@@ -52,7 +51,8 @@ function EpisodeDetails({ details, embed }) {
       h('h2', details.title),
       h('div', {
         dangerouslySetInnerHTML: { __html: md.render(details.long_description) }
-      })
+      }),
+      h(Cursor)
     ])
   ]);
 }
@@ -63,6 +63,10 @@ function PodcastDetails({ podcast }) {
     h('h1', [podcast.title, h('small', podcast.author)]),
     h('p', podcast.description)
   ]);
+}
+
+function Cursor() {
+  return h('span.cursor', '█');
 }
 
 class App extends React.Component {
@@ -76,12 +80,6 @@ class App extends React.Component {
     this.selectEpisode = this.selectEpisode.bind(this);
   }
 
-  componentDidMount() {
-    if (typeof this.state.details === 'undefined') {
-      this.selectEpisode(this.props.episodes[0].id);
-    }
-  }
-
   selectEpisode(id) {
     getEpisode(id).then(([details, embed]) => {
       this.setState({ details, embed });
@@ -90,7 +88,14 @@ class App extends React.Component {
 
   render() {
     const { episodes, podcast } = this.props;
-    const { details, embed } = this.state;
+    const {
+      details = this.props.details,
+      embed = this.props.embed
+    } = this.state;
+
+    if (typeof episodes === 'undefined') {
+      return h('section.kortslutning.crt', [h('div.loading', [h(Cursor)])]);
+    }
 
     if (typeof details === 'undefined') {
       return h('section.kortslutning.crt', [h(EpisodeList, { episodes })]);
@@ -107,6 +112,9 @@ class App extends React.Component {
 }
 
 const mount = document.querySelector('#app');
+ReactDOM.render(h(App), mount);
 Promise.all([getPodcast(), getEpisodes()]).then(function([podcast, episodes]) {
-  ReactDOM.render(h(App, { episodes, podcast }), mount);
+  return getEpisode(episodes[0].id).then(function([details, embed]) {
+    ReactDOM.render(h(App, { episodes, podcast, details, embed }), mount);
+  });
 });
