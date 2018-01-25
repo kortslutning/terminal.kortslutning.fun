@@ -24,11 +24,19 @@ function getEpisode(id) {
 }
 
 function Episode({ episode, onSelect }) {
+  console.log(episode);
   return h('li.episode', [
     h(
       'a.episode-item',
-      { href: '#', title: episode.title, onClick: () => onSelect(episode.id) },
-      episode.title
+      {
+        href: episode.sharing_url,
+        title: episode.title,
+        onClick: e => {
+          e.preventDefault();
+          onSelect(episode.id);
+        }
+      },
+      `ep${episode.number}. ${episode.title}`
     )
   ]);
 }
@@ -69,6 +77,19 @@ function Cursor() {
   return h('span.cursor', '█');
 }
 
+function PodcastFooter({ podcast }) {
+  console.log(podcast);
+  return h('footer.podcastFooter', [
+    podcast.author,
+    ' – ',
+    h(
+      'a',
+      { href: `https://twitter.com/${podcast.twitter}` },
+      '@' + podcast.twitter
+    )
+  ]);
+}
+
 class App extends React.Component {
   constructor() {
     super();
@@ -106,7 +127,8 @@ class App extends React.Component {
       h('div.content', [
         h(EpisodeList, { episodes, onSelect: this.selectEpisode }),
         h(EpisodeDetails, { details, embed })
-      ])
+      ]),
+      h(PodcastFooter, { podcast })
     ]);
   }
 }
